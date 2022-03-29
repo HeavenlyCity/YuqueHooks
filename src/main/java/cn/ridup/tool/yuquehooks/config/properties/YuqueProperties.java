@@ -13,9 +13,9 @@ import lombok.Data;
 /**
  * yuque configuration properties.
  *
- * @author johnniang
- * @author ryanwang
- * @date 2019-03-15
+ * @author ridup
+ * @version 0.1.0
+ * @since 2022/3/29 20:41
  */
 @Data
 @ConfigurationProperties("yuque")

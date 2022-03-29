@@ -13,7 +13,9 @@ import org.springframework.core.annotation.AliasFor;
 /**
  * Cache lock annotation.
  *
- * @author johnniang
+ * @author ridup
+ * @version 0.1.0
+ * @since 2022/3/29 20:41
  * @date 3/28/19
  */
 @Target(ElementType.METHOD)

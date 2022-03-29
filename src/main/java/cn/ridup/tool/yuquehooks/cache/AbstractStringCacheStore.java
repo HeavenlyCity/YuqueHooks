@@ -14,10 +14,13 @@ import cn.ridup.tool.yuquehooks.exception.ServiceException;
 import cn.ridup.tool.yuquehooks.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 
+
 /**
  * String cache store.
  *
- * @author johnniang
+ * @author ridup
+ * @version 0.1.0
+ * @since 2022/3/29 20:41
  */
 @Slf4j
 public abstract class AbstractStringCacheStore extends AbstractCacheStore<String, String> {

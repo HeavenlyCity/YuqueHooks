@@ -21,7 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Interceptor for cache lock annotation.
  *
- * @author johnniang
+ * @author ridup
+ * @version 0.1.0
+ * @since 2022/3/29 20:41
  * @date 3/28/19
  */
 @Slf4j

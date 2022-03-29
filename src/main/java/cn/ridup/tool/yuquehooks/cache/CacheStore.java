@@ -11,8 +11,9 @@ import org.springframework.lang.NonNull;
  *
  * @param <K> cache key type
  * @param <V> cache value type
- * @author johnniang
- * *
+ * @author ridup
+ * @version 0.1.0
+ * @since 2022/3/29 20:41
  */
 public interface CacheStore<K, V> {
 

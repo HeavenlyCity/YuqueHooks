@@ -18,7 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * In-memory cache store.
  *
- * @author johnniang
+ * @author ridup
+ * @version 0.1.0
+ * @since 2022/3/29 20:41
  */
 @Slf4j
 public class InMemoryCacheStore extends AbstractStringCacheStore {
@@ -122,7 +124,9 @@ public class InMemoryCacheStore extends AbstractStringCacheStore {
     /**
      * Cache cleaner.
      *
-     * @author johnniang
+     * @author ridup
+     * @version 0.1.0
+     * @since 2022/3/29 20:41
      * @date 03/28/19
      */
     private class CacheExpiryCleaner extends TimerTask {

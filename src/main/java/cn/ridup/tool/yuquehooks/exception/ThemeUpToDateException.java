@@ -3,7 +3,9 @@ package cn.ridup.tool.yuquehooks.exception;
 /**
  * Theme up to date exception.
  *
- * @author johnniang
+ * @author ridup
+ * @version 0.1.0
+ * @since 2022/3/29 20:41
  */
 public class ThemeUpToDateException extends BadRequestException {
 

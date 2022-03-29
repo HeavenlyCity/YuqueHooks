@@ -15,8 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Abstract cache store.
  *
- * @author johnniang
- * @date 3/28/19
+ * @author ridup
+ * @version 0.1.0
+ * @since 2022/3/29 20:41
  */
 @Slf4j
 public abstract class AbstractCacheStore<K, V> implements CacheStore<K, V> {

@@ -7,9 +7,9 @@ import org.springframework.lang.Nullable;
 /**
  * Base exception of the project.
  *
- * @author johnniang
- * @author ryan0up
- * @date 2019-03-15
+ * @author ridup
+ * @version 0.1.0
+ * @since 2022/3/29 20:41
  */
 public abstract class AbstractYuqueException extends RuntimeException {
 
