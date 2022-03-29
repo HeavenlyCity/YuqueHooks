@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.ridup.tool.yuquehooks.biz.dto.DocDetailDto;
+import cn.ridup.tool.yuquehooks.service.dto.DocDetailDto;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * webhooks 入口
@@ -16,6 +17,7 @@ import cn.ridup.tool.yuquehooks.biz.dto.DocDetailDto;
  */
 @RestController
 @RequestMapping(value ="/yuque")
+@Slf4j
 public class YuqueHooksController {
 
     @PostMapping("/hooks")

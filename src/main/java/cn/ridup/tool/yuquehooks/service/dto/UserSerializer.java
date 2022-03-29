@@ -1,4 +1,4 @@
-package cn.ridup.tool.yuquehooks.biz.dto;
+package cn.ridup.tool.yuquehooks.service.dto;
 
 import java.io.Serializable;
 

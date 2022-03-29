@@ -32,7 +32,6 @@ public class LogParamFilter extends OncePerRequestFilter implements Ordered {
     public static final String SPLIT_STRING_M = "=";
     public static final String SPLIT_STRING_DOT = ", ";
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
@@ -42,10 +41,10 @@ public class LogParamFilter extends OncePerRequestFilter implements Ordered {
         filterChain.doFilter(wrapperRequest, wrapperResponse);
 
         String requestBodyStr = getRequestBody(wrapperRequest);
-        log.info("params[{}] | request body:{}", urlParams, requestBodyStr);
+        log.info("入参:{}", requestBodyStr);
 
         String responseBodyStr = getResponseBody(wrapperResponse);
-        log.info("response body:{}", responseBodyStr);
+        log.info("响应:{}", responseBodyStr);
         wrapperResponse.copyBodyToResponse();
     }
 
@@ -106,7 +105,9 @@ public class LogParamFilter extends OncePerRequestFilter implements Ordered {
         //获取请求参数
         while (enu.hasMoreElements()) {
             String name = enu.nextElement();
-            sb.append(name + SPLIT_STRING_M).append(request.getParameter(name));
+            sb.append(name)
+                .append(SPLIT_STRING_M)
+                .append(request.getParameter(name));
             if (enu.hasMoreElements()) {
                 sb.append(SPLIT_STRING_DOT);
             }
