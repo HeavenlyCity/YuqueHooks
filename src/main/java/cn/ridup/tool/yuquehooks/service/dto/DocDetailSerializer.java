@@ -27,7 +27,7 @@ public class DocDetailSerializer implements Serializable {
     /**
      * 仓库编号，就是 repo_id
      */
-    private String book_id;
+    private Integer bookId;
 
     /**
      * 仓库信息 <BookSerializer>，就是 repo 信息
@@ -37,7 +37,7 @@ public class DocDetailSerializer implements Serializable {
     /**
      * 用户/团队编号
      */
-    private String user_id;
+    private Integer userId;
 
     /**
      * 用户/团队信息 <UserSerializer>
@@ -57,62 +57,62 @@ public class DocDetailSerializer implements Serializable {
     /**
      * 草稿 Markdown 源代码
      */
-    private String body_draft;
+    private String bodyDraft;
 
     /**
      * 转换过后的正文 HTML （重大变更，详情请参考：https://www.yuque.com/yuque/developer/yr938f）
      */
-    private String body_html;
+    private String bodyHtml;
 
     /**
      * 语雀 lake 格式的文档内容
      */
-    private String body_lake;
+    private String bodyLake;
 
     /**
      * 文档创建人 User Id
      */
-    private String creator_id;
+    private Integer creatorId;
 
     /**
      *  公开级别 [0 - 私密, 1 - 公开]
      */
-    // private String public;
+    private Integer publicFlag;
 
     /**
      * 状态 [0 - 草稿, 1 - 发布]
      */
-    private String status;
+    private Integer status;
 
     /**
      * 赞数量
      */
-    private String likes_count;
+    private Integer likesCount;
 
     /**
      * 评论数量
      */
-    private String comments_count;
+    private Integer commentsCount;
 
     /**
      * 文档内容更新时间
      */
-    private String content_updated_at;
+    private String contentUpdatedAt;
 
     /**
      * 删除时间，未删除为 null
      */
-    private String deleted_at;
+    private String deletedAt;
 
     /**
      * 创建时间
      */
-    private String created_at;
+    private String createdAt;
 
     /**
      * 更新时private String
      */
-    private String updated_at;
+    private String updatedAt;
 
 }
 

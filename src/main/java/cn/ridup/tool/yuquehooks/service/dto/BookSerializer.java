@@ -13,12 +13,13 @@ import lombok.Data;
  */
 @Data
 public class BookSerializer implements Serializable {
+
     private static final long serialVersionUID = -2644927913171649446L;
 
     /**
      * 仓库编号
      */
-    private String id;
+    private Integer id;
 
     /**
      * 类型 [Book - 文档]
@@ -43,7 +44,7 @@ public class BookSerializer implements Serializable {
     /**
      * 所属的团队/用户编号
      */
-    private String user_id;
+    private Integer userId;
 
     /**
      * <UserSerializer>
@@ -58,31 +59,31 @@ public class BookSerializer implements Serializable {
     /**
      * 创建人 User Id
      */
-    private String creator_id;
+    private Integer creatorId;
 
     /**
      *  公开状态 [1 - 公开, 0 - 私密]
      */
-    // private String public;
+    private Integer publicFlag;
 
     /**
      * 喜欢数量
      */
-    private String likes_count;
+    private Integer likesCount;
 
     /**
      * 订阅数量
      */
-    private String watches_count;
+    private Integer watchesCount;
 
     /**
      * 创建时间
      */
-    private String created_at;
+    private String createdAt;
 
     /**
      * 更新时间
      */
-    private String updated_at;
+    private String updatedAt;
 
 }

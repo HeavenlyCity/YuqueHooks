@@ -14,10 +14,12 @@ import lombok.Data;
 @Data
 public class UserSerializer implements Serializable {
 
+    private static final long serialVersionUID = 8187094795049536829L;
+
     /**
      * 用户编号
      */
-    private String id;
+    private Integer id;
 
     /**
      * 类型 [`User`  - 用户, Group - 团队]
@@ -37,16 +39,16 @@ public class UserSerializer implements Serializable {
     /**
      * 头像 URL
      */
-    private String avatar_url;
+    private String avatarUrl;
 
     /**
      * 创建时间
      */
-    private String created_at;
+    private String createdAt;
 
     /**
      * 更新时间
      */
-    private String updated_at;
+    private String updatedAt;
 
 }
