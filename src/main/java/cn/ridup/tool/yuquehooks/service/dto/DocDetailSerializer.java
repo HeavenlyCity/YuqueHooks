@@ -1,6 +1,7 @@
 package cn.ridup.tool.yuquehooks.service.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -97,22 +98,22 @@ public class DocDetailSerializer implements Serializable {
     /**
      * 文档内容更新时间
      */
-    private String contentUpdatedAt;
+    private Date contentUpdatedAt;
 
     /**
      * 删除时间，未删除为 null
      */
-    private String deletedAt;
+    private Date deletedAt;
 
     /**
      * 创建时间
      */
-    private String createdAt;
+    private Date createdAt;
 
     /**
      * 更新时private String
      */
-    private String updatedAt;
+    private Date updatedAt;
 
 }
 

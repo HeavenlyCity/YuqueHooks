@@ -137,6 +137,7 @@ public class DateUtils {
 
             "yyyy-MM-dd'T'HH:mm:ssZ",
             "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
+            "yyyy-MM-dd'T'HH:mm:ss.SSSX",
         };
         try {
             return org.apache.commons.lang3.time.DateUtils.parseDate(str, locale, patterns);

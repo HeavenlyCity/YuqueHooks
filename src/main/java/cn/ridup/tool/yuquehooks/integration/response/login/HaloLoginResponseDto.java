@@ -1,4 +1,4 @@
-package cn.ridup.tool.yuquehooks.integration.response;
+package cn.ridup.tool.yuquehooks.integration.response.login;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -18,8 +18,8 @@ public class HaloLoginResponseDto implements java.io.Serializable {
     @JsonProperty("access_token")
     private String accessToken;
 
-    @JsonProperty("expires_in")
-    private Integer expiresIn;
+    @JsonProperty("expired_in")
+    private Integer expiredIn;
 
     @JsonProperty("refresh_token")
     private String refreshToken;

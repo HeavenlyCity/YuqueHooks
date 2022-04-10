@@ -2,21 +2,18 @@ package cn.ridup.tool.yuquehooks.service.impl;
 
 import javax.annotation.Resource;
 
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.util.Assert;
 
-import cn.ridup.tool.yuquehooks.integration.request.HaloLoginRequestDto;
-import cn.ridup.tool.yuquehooks.integration.response.HaloCommonDto;
-import cn.ridup.tool.yuquehooks.integration.response.HaloLoginResponseDto;
+import cn.ridup.tool.yuquehooks.integration.HaloIntegration;
+import cn.ridup.tool.yuquehooks.integration.request.HaloPostRequestDto;
+import cn.ridup.tool.yuquehooks.integration.response.post.BasePostSimpleDTO;
+import cn.ridup.tool.yuquehooks.integration.support.Page;
 import cn.ridup.tool.yuquehooks.service.YuqueHooksService;
 import cn.ridup.tool.yuquehooks.service.convertor.DocDetailConvertor;
+import cn.ridup.tool.yuquehooks.service.convertor.HaloDataConvertor;
 import cn.ridup.tool.yuquehooks.service.dto.DocDetailDto;
+import cn.ridup.tool.yuquehooks.service.dto.DocDetailSerializer;
 import cn.ridup.tool.yuquehooks.service.dto.YuqueHooksDto;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,51 +29,36 @@ import lombok.extern.slf4j.Slf4j;
 public class YuqueHooksServiceImpl implements YuqueHooksService {
 
     @Resource
-    private RestTemplate restTemplate;
-
-    private static final String HALO_HOST = "https://ridup.cn";
-
-    /** <a href="https://api.halo.run/admin-api.html#operation/authUsingPOST">Creates a post</a> */
-    private static final String HALO_LOGIN = "/api/admin/login";
-
-    /** <a href="https://api.halo.run/admin-api.html#operation/createByUsingPOST_7">Creates a post</a> */
-    private static final String CREATES_POST = "/api/admin/login";
-
-    /** <a href="https://api.halo.run/admin-api.html#operation/updateByUsingPUT_8">Updates a post</a> */
-    private static final String UPDATES_POST = "/api/admin/posts/{postId}";
-
-    /** <a href="https://api.halo.run/admin-api.html#operation/updateStatusByUsingPUT_2">Updates post status</a> */
-    private static final String UPDATES_POST_STATUS = "/api/admin/posts/{postId}/status/{status}";
+    private HaloIntegration haloIntegration;
 
     @Override
     public void hooks(YuqueHooksDto yuqueHooksDto) {
         DocDetailDto docDetailDto = DocDetailConvertor.convertToDocDetail(yuqueHooksDto);
         log.info("the docDetailDto is {}", docDetailDto);
-        HaloLoginRequestDto haloLoginRequestDto = new HaloLoginRequestDto();
-        haloLoginRequestDto.setUsername("ridup");
-        HaloCommonDto<HaloLoginResponseDto> haloLoginResponseDtoHaloCommonDto = postForEntityWithHeader(
-            haloLoginRequestDto, HaloLoginResponseDto.class);
-        HaloLoginResponseDto data = haloLoginResponseDtoHaloCommonDto.getData();
-    }
-
-    public <E, T> HaloCommonDto<T> postForEntityWithHeader(E request, Class<T> entity) {
-        String url = HALO_HOST + HALO_LOGIN;
-        HttpEntity<E> httpEntity = new HttpEntity(request, getDefaultHttpHeader());
-        ParameterizedTypeReference<HaloCommonDto<T>> type = new ParameterizedTypeReference<>() {};
-        ResponseEntity<HaloCommonDto<T>> haloCommonDtoResponseEntity = restTemplate.exchange(url, HttpMethod.POST,
-            httpEntity, type);
-        return haloCommonDtoResponseEntity.getBody();
-    }
-
-    /**
-     * 获取默认的请求头
-     *
-     * @return 请求头
-     */
-    public HttpHeaders getDefaultHttpHeader() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
-        return headers;
+        Assert.notNull(docDetailDto, "yuque doc detail must not be null");
+        DocDetailSerializer data = docDetailDto.getData();
+        Assert.notNull(data, "yuque doc detail data must not be null");
+        Page<BasePostSimpleDTO> postList = haloIntegration.queryPostList(data.getTitle(), 0, 100);
+        boolean isExist = false;
+        if (postList.getTotal() > 0) {
+            isExist = postList.getContent()
+                .stream()
+                .anyMatch(basePostSimpleDTO -> basePostSimpleDTO.getSlug()
+                    .equals(data.getSlug()));
+        }
+        HaloPostRequestDto requestDto = new HaloPostRequestDto();
+        requestDto.setPostParam(HaloDataConvertor.convert(data));
+        if (isExist) {
+            BasePostSimpleDTO first = postList.getContent()
+                .stream()
+                .filter(basePostSimpleDTO -> basePostSimpleDTO.getSlug()
+                    .equals(data.getSlug()))
+                .findFirst()
+                .orElseThrow();
+            haloIntegration.updatePost(requestDto, first.getId());
+        } else {
+            haloIntegration.createPost(requestDto);
+        }
     }
 
 }
