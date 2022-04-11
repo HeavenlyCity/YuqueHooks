@@ -43,11 +43,12 @@ public class HaloIntegrationImpl implements HaloIntegration {
 
     private static final String PASSWORD = "";
 
+    private static final String HALO_HOST = "https://ridup.cn";
+
     private static final String HALO_ADMIN_TOKEN_CACHE_KEY = "halo_admin_token_cache_key";
 
     private static final String HALO_REQUEST_HEADER_TOKEN_KEY = "ADMIN-Authorization";
 
-    private static final String HALO_HOST = "https://ridup.cn";
 
     /** <a href="https://api.halo.run/admin-api.html#operation/authUsingPOST">Creates a post</a> */
     private static final String HALO_LOGIN = "/api/admin/login";
@@ -114,7 +115,7 @@ public class HaloIntegrationImpl implements HaloIntegration {
         haloLoginRequestDto.setUsername(username);
         haloLoginRequestDto.setPassword(password);
         HaloCommonDto<HaloLoginResponseDto> haloLoginResponseDtoHaloCommonDto = postForEntityWithHeader(
-            HALO_LOGIN,haloLoginRequestDto, new ParameterizedTypeReference<>() {
+            HALO_LOGIN,haloLoginRequestDto, new ParameterizedTypeReference<HaloCommonDto<HaloLoginResponseDto>>() {
             });
         HaloLoginResponseDto data = haloLoginResponseDtoHaloCommonDto.getData();
         cacheStore.put(HALO_ADMIN_TOKEN_CACHE_KEY, data.getAccessToken(), data.getExpiredIn(), TimeUnit.SECONDS);
@@ -124,7 +125,7 @@ public class HaloIntegrationImpl implements HaloIntegration {
     @Override
     public HaloPostResponseDto createPost(HaloPostRequestDto requestDto) {
         HaloCommonDto<HaloPostResponseDto> createPostResponseDto = postForEntityWithHeader(
-            CREATES_POST,requestDto.getPostParam(), new ParameterizedTypeReference<>() {
+            CREATES_POST,requestDto.getPostParam(), new ParameterizedTypeReference<HaloCommonDto<HaloPostResponseDto>>() {
             });
         return createPostResponseDto.getData();
     }
@@ -132,7 +133,7 @@ public class HaloIntegrationImpl implements HaloIntegration {
     @Override
     public HaloPostResponseDto updatePost(HaloPostRequestDto requestDto,Integer postId) {
         HaloCommonDto<HaloPostResponseDto> updatePostResponseDto = putForEntityWithHeader(
-            UPDATES_POST+postId,requestDto.getPostParam(), new ParameterizedTypeReference<>() {
+            UPDATES_POST+postId,requestDto.getPostParam(), new ParameterizedTypeReference<HaloCommonDto<HaloPostResponseDto>>() {
             });
         return updatePostResponseDto.getData();
     }
@@ -144,7 +145,7 @@ public class HaloIntegrationImpl implements HaloIntegration {
         requestDto.setPage(page);
         requestDto.setSize(size);
         HaloCommonDto<Page<BasePostSimpleDTO>> createPostResponseDto = getForEntityWithHeader(
-            LISTS_POSTS,requestDto, new ParameterizedTypeReference<>() {
+            LISTS_POSTS,requestDto, new ParameterizedTypeReference<HaloCommonDto<Page<BasePostSimpleDTO>>>() {
             });
         return createPostResponseDto.getData();
     }

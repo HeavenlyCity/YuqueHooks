@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 40406
   forward-headers-strategy: native
   error:
     include-message: always
@@ -12,12 +12,6 @@ spring:
   output:
     ansi:
       enabled: always
-
-    # H2 database configuration.
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:${halo.work-dir}/db/halo
-    username: admin
-    password: 123456
   jpa:
     hibernate:
       ddl-auto: update
@@ -29,14 +23,6 @@ spring:
       max-file-size: 10240MB
       max-request-size: 10240MB
       resolve-lazily: true
-  freemarker:
-    suffix: .ftl
-    settings:
-      auto_import: /common/macro/global_macro.ftl as global
-    template-loader-path:
-      - file:///${halo.work-dir}/templates/
-      - classpath:/templates/
-    expose-spring-macro-helpers: false
   data:
     redis:
       repositories:
@@ -52,16 +38,16 @@ management:
       enabled: false
 logging:
   level:
-    run.halo.app: INFO
+    run.yuque.app: INFO
     org.eclipse.jetty.server.HttpChannel: ERROR
   file:
-    path: ${halo.work-dir}/logs
+    path: ${yuque.work-dir}/logs
 
 springfox:
   documentation:
     enabled: false
 
-halo:
+yuque:
   download-timeout: 5m
   cache: memory
-  work-dir: ${user.home}/.halo/
+  work-dir: ${user.home}/.yuque
