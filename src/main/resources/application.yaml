@@ -51,3 +51,7 @@ yuque:
   download-timeout: 5m
   cache: memory
   work-dir: ${user.home}/.yuque
+  halo:
+    username: ridup
+    password: 123456
+    host: https://ridup.cn

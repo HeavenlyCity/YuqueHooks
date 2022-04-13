@@ -1,5 +1,6 @@
 package cn.ridup.tool.yuquehooks.config.properties;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -12,10 +13,10 @@ import lombok.Data;
 @Data
 public class HaloProperties {
 
-    private final String username = "ridup";
+    private String username;
 
-    private final String password = "";
+    private String password;
 
-    private final String host = "https://ridup.cn";
+    private String host;
 
 }

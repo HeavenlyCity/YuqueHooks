@@ -61,7 +61,7 @@ public class YuqueProperties {
         return StringUtils.removeEnd(string, suffix) + suffix;
     }
 
-    private HaloProperties halo;
+    private HaloProperties halo = new HaloProperties();
 
 
 }

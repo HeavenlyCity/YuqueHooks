@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -11,9 +12,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 
 import cn.ridup.tool.yuquehooks.cache.AbstractStringCacheStore;
+import cn.ridup.tool.yuquehooks.config.properties.YuqueProperties;
 import cn.ridup.tool.yuquehooks.integration.HaloIntegration;
 import cn.ridup.tool.yuquehooks.integration.request.HaloPostRequestDto;
 import cn.ridup.tool.yuquehooks.integration.request.HaloLoginRequestDto;
@@ -38,6 +41,9 @@ public class HaloIntegrationImpl implements HaloIntegration {
     private RestTemplate restTemplate;
 
     private final AbstractStringCacheStore cacheStore;
+
+    @Autowired
+    private YuqueProperties yuqueProperties;
 
     private static final String USERNAME = "ridup";
 
@@ -69,7 +75,8 @@ public class HaloIntegrationImpl implements HaloIntegration {
 
     public <E, T> HaloCommonDto<T> fetchForEntityWithHeader(String path,HttpMethod method,E request,
         ParameterizedTypeReference<HaloCommonDto<T>> type) {
-        String url = HALO_HOST + path;
+        Assert.notNull(yuqueProperties.getHalo().getHost() , "halo host is null");
+        String url = yuqueProperties.getHalo().getHost() + path;
         HttpEntity<E> httpEntity = new HttpEntity<>(request, getDefaultHttpHeader(!HALO_LOGIN.equals(path)));
         ResponseEntity<HaloCommonDto<T>> haloCommonDtoResponseEntity = restTemplate.exchange(url, method,
             httpEntity, type);
@@ -102,7 +109,9 @@ public class HaloIntegrationImpl implements HaloIntegration {
         if(tokenCheck){
             if(cacheStore.get(HALO_ADMIN_TOKEN_CACHE_KEY)
                 .isEmpty()) {
-                login(USERNAME,PASSWORD);
+                Assert.notNull(yuqueProperties.getHalo().getUsername() , "halo  username is null");
+                Assert.notNull(yuqueProperties.getHalo().getPassword() , "halo  password is null");
+                login(yuqueProperties.getHalo().getUsername(),yuqueProperties.getHalo().getPassword());
             }
             headers.add(HALO_REQUEST_HEADER_TOKEN_KEY, cacheStore.get(HALO_ADMIN_TOKEN_CACHE_KEY).get());
         }
