@@ -1,5 +1,8 @@
 package cn.ridup.tool.yuquehooks.service.convertor;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.StringUtils;
 
 import cn.ridup.tool.yuquehooks.config.properties.HaloProperties;
@@ -73,7 +76,26 @@ public class HaloDataConvertor {
         postParam.setSlug(dto.getSlug());
         // postParam.setPassword();
         postParam.setEditorType(PostEditorType.MARKDOWN);
-        postParam.setContent(dto.getBodyHtml());
+        if (StringUtils.isNotBlank(dto.getBodyHtml())) {
+            String bodyHtml = dto.getBodyHtml();
+
+            Pattern p = Pattern.compile("<div [^>]*class=\"ne-thirdparty\"(<div[^>]*>.*?</div>|.)*?</div>");
+            Matcher matcher = p.matcher(bodyHtml);
+            if (matcher.find()) {
+                String musicDiv = matcher.group();
+                Pattern musicPattern = Pattern.compile("https://music.163.com[^\"]*");
+                Matcher musicMatcher = musicPattern.matcher(musicDiv);
+                if (musicMatcher.find()) {
+                    String musicUrl = musicMatcher.group();
+                    bodyHtml = bodyHtml.replace(musicDiv,
+                        "<iframe frameborder=\"no\" border=\"0\" marginwidth=\"0\" marginheight=\"0\" height=86 src=\""
+                            + musicUrl + "\" style=\"width: -webkit-fill-available;\"></iframe>\n");
+                }
+            }
+
+            postParam.setContent(bodyHtml);
+        }
+
         postParam.setOriginalContent(dto.getBody());
         if (StringUtils.isNotBlank(dto.getBody())) {
             postParam.setSummary(dto.getBody()
