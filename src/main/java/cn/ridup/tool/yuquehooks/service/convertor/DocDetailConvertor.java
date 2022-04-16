@@ -3,6 +3,7 @@ package cn.ridup.tool.yuquehooks.service.convertor;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -15,6 +16,8 @@ import cn.ridup.tool.yuquehooks.service.dto.DocDetailDto;
 import cn.ridup.tool.yuquehooks.service.dto.DocDetailSerializer;
 import cn.ridup.tool.yuquehooks.service.dto.UserSerializer;
 import cn.ridup.tool.yuquehooks.service.dto.YuqueHooksDto;
+import cn.ridup.tool.yuquehooks.service.enumeration.EnumWebhookSubjectType;
+import cn.ridup.tool.yuquehooks.service.enumeration.ValueEnum;
 import cn.ridup.tool.yuquehooks.utils.DateUtils;
 import cn.ridup.tool.yuquehooks.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -37,11 +40,21 @@ public class DocDetailConvertor {
 
         DocDetailDto result = new DocDetailDto();
         DocDetailSerializer docDetailSerializer = new DocDetailSerializer();
-        docDetailSerializer.setSlug((String) data.get(DocDetailSerializerKey.SLUG));
+
+        BookSerializer bookSerializer = convertToBook(data.get(DocDetailSerializerKey.BOOK));
+        Assert.notNull(bookSerializer, "bookSerializer is null");
+        if(data.get(DocDetailSerializerKey.SLUG) == null && data.get(DocDetailSerializerKey.PATH) != null) {
+            String path = (String) data.get(DocDetailSerializerKey.PATH);
+            String[] split = path.split(bookSerializer.getSlug());
+            docDetailSerializer.setSlug(split[split.length - 1].replace("/",""));
+        }else{
+            docDetailSerializer.setSlug((String) data.get(DocDetailSerializerKey.SLUG));
+        }
+
         docDetailSerializer.setTitle((String) data.get(DocDetailSerializerKey.TITLE));
 
         docDetailSerializer.setBookId((Integer) data.get(DocDetailSerializerKey.BOOK_ID));
-        docDetailSerializer.setBook(convertToBook(data.get(DocDetailSerializerKey.BOOK)));
+        docDetailSerializer.setBook(bookSerializer);
 
         docDetailSerializer.setUserId((Integer) data.get(DocDetailSerializerKey.USER_ID));
         docDetailSerializer.setUser(convertToUser(data.get(DocDetailSerializerKey.USER)));
@@ -70,6 +83,19 @@ public class DocDetailConvertor {
         if (StringUtils.isNotBlank((String) data.get(DocDetailSerializerKey.UPDATED_AT))) {
             docDetailSerializer.setUpdatedAt(DateUtils.parseDate((String) data.get(DocDetailSerializerKey.UPDATED_AT)));
         }
+
+        if (StringUtils.isNotBlank((String) data.get(DocDetailSerializerKey.PATH))) {
+            docDetailSerializer.setPath((String) data.get(DocDetailSerializerKey.PATH));
+        }
+
+        if (StringUtils.isNotBlank((String) data.get(DocDetailSerializerKey.ACTION_TYPE))) {
+            docDetailSerializer.setActionType(ValueEnum.valueToEnum(EnumWebhookSubjectType.class,(String) data.get(DocDetailSerializerKey.ACTION_TYPE)));
+        }
+
+        if (StringUtils.isNotBlank((String) data.get(DocDetailSerializerKey.WEBHOOK_SUBJECT_TYPE))) {
+            docDetailSerializer.setWebhookSubjectType(ValueEnum.valueToEnum(EnumWebhookSubjectType.class,(String) data.get(DocDetailSerializerKey.WEBHOOK_SUBJECT_TYPE)));
+        }
+
         result.setData(docDetailSerializer);
         return result;
     }

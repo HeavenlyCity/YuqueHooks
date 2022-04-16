@@ -52,6 +52,7 @@ yuque:
   cache: memory
   work-dir: ${user.home}/.yuque
   halo:
-    username: ridup
+    username: halo
     password: 123456
-    host: https://ridup.cn
+    host: https://halo.cn
+    publishOn: publish

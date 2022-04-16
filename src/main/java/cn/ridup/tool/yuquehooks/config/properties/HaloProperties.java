@@ -1,6 +1,6 @@
 package cn.ridup.tool.yuquehooks.config.properties;
 
-import lombok.Builder;
+import cn.ridup.tool.yuquehooks.service.enumeration.EnumPublishOn;
 import lombok.Data;
 
 /**
@@ -18,5 +18,10 @@ public class HaloProperties {
     private String password;
 
     private String host;
+
+    private String port;
+
+    /** {@link EnumPublishOn } */
+    private String publishOn = "publish";
 
 }

@@ -1,5 +1,7 @@
 package cn.ridup.tool.yuquehooks.integration.request;
 
+import cn.ridup.tool.yuquehooks.service.enumeration.ValueEnum;
+
 /**
  * Post status.
  *

@@ -3,6 +3,7 @@ package cn.ridup.tool.yuquehooks.service.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import cn.ridup.tool.yuquehooks.service.enumeration.EnumWebhookSubjectType;
 import lombok.Data;
 
 /**
@@ -76,7 +77,7 @@ public class DocDetailSerializer implements Serializable {
     private Integer creatorId;
 
     /**
-     *  公开级别 [0 - 私密, 1 - 公开]
+     * 公开级别 [0 - 私密, 1 - 公开]
      */
     private Integer publicFlag;
 
@@ -114,6 +115,20 @@ public class DocDetailSerializer implements Serializable {
      * 更新时private String
      */
     private Date updatedAt;
+
+    /**
+     * doc path
+     */
+    private String path;
+
+    /**
+     * action type
+     */
+    private EnumWebhookSubjectType actionType;
+    /**
+     * webhook subject type
+     */
+    private EnumWebhookSubjectType webhookSubjectType;
 
 }
 

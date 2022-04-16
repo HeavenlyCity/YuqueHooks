@@ -20,6 +20,7 @@ import cn.ridup.tool.yuquehooks.config.properties.YuqueProperties;
 import cn.ridup.tool.yuquehooks.integration.HaloIntegration;
 import cn.ridup.tool.yuquehooks.integration.request.HaloPostRequestDto;
 import cn.ridup.tool.yuquehooks.integration.request.HaloLoginRequestDto;
+import cn.ridup.tool.yuquehooks.integration.request.PostStatus;
 import cn.ridup.tool.yuquehooks.integration.request.QueryPostListRequestDto;
 import cn.ridup.tool.yuquehooks.integration.response.HaloCommonDto;
 import cn.ridup.tool.yuquehooks.integration.response.login.HaloLoginResponseDto;
@@ -65,8 +66,8 @@ public class HaloIntegrationImpl implements HaloIntegration {
     /** <a href="https://api.halo.run/admin-api.html#operation/updateByUsingPUT_8">Updates a post</a> */
     private static final String UPDATES_POST = "/api/admin/posts/";
 
-    /** <a href="https://api.halo.run/admin-api.html#operation/updateStatusByUsingPUT_2">Updates post status</a> */
-    private static final String UPDATES_POST_STATUS = "/api/admin/posts/{postId}/status/{status}";
+    /** <a href="https://api.halo.run/admin-api.html#operation/updateStatusByUsingPUT_2">Updates post status</a> :/api/admin/posts/{postId}/status/{status} */
+    private static final String UPDATES_POST_STATUS = "/api/admin/posts/";
 
     /** <a href="https://api.halo.run/admin-api.html#operation/pageByUsingGET_6"> Lists posts </a> */
     private static final String LISTS_POSTS = "/api/admin/posts";
@@ -159,4 +160,12 @@ public class HaloIntegrationImpl implements HaloIntegration {
         return createPostResponseDto.getData();
     }
 
+    @Override
+    public BasePostSimpleDTO updateStatusBy(Integer postId, PostStatus status) {
+        Assert.notNull(postId,"updateStatusBy's postId is null");
+        HaloCommonDto<BasePostSimpleDTO> updatePostResponseDto = putForEntityWithHeader(
+            UPDATES_POST_STATUS+postId+"/status/"+status.toString(),null, new ParameterizedTypeReference<HaloCommonDto<BasePostSimpleDTO>>() {
+            });
+        return updatePostResponseDto.getData();
+    }
 }

@@ -51,5 +51,10 @@ public class DocDetailSerializerKey {
     public static final String CREATED_AT = "created_at";
     /** 更新时间 */
     public static final String UPDATED_AT = "updated_at";
-
+    /** doc path */
+    public static final String PATH = "path";
+    /** action_type */
+    public static final String ACTION_TYPE = "action_type";
+    /** webhook_subject_type */
+    public static final String WEBHOOK_SUBJECT_TYPE = "webhook_subject_type";
 }

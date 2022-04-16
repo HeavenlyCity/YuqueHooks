@@ -1,5 +1,7 @@
-package cn.ridup.tool.yuquehooks.integration.request;
+package cn.ridup.tool.yuquehooks.service.enumeration;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.util.Assert;
@@ -33,9 +35,8 @@ public interface ValueEnum<T> {
         Assert.notNull(enumType, "enum type must not be null");
         Assert.notNull(value, "value must not be null");
         Assert.isTrue(enumType.isEnum(), "type must be an enum type");
-
         return Stream.of(enumType.getEnumConstants())
-            .filter(item -> item.getValue().equals(value))
+            .filter(item -> value.equals(item.getValue()))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("unknown database value: " + value));
     }

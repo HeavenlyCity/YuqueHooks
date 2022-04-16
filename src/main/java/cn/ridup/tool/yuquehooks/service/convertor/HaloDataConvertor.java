@@ -1,9 +1,14 @@
 package cn.ridup.tool.yuquehooks.service.convertor;
 
+import org.apache.commons.lang3.StringUtils;
+
+import cn.ridup.tool.yuquehooks.config.properties.HaloProperties;
 import cn.ridup.tool.yuquehooks.integration.request.PostEditorType;
 import cn.ridup.tool.yuquehooks.integration.request.PostParam;
 import cn.ridup.tool.yuquehooks.integration.request.PostStatus;
 import cn.ridup.tool.yuquehooks.service.dto.DocDetailSerializer;
+import cn.ridup.tool.yuquehooks.service.enumeration.EnumPublishOn;
+import cn.ridup.tool.yuquehooks.service.enumeration.ValueEnum;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -16,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HaloDataConvertor {
 
-    public static PostParam convert(DocDetailSerializer dto) {
+    public static PostParam convert(DocDetailSerializer dto, HaloProperties halo) {
 
         if (dto == null) {
             return null;
@@ -25,10 +30,44 @@ public class HaloDataConvertor {
         // postParam.setTagIds();
         // postParam.setCategoryIds();
         postParam.setTitle(dto.getTitle());
-        if (dto.getStatus() == 1 && dto.getPublicFlag() == 1) {
-            postParam.setStatus(PostStatus.PUBLISHED);
-        } else {
-            postParam.setStatus(PostStatus.DRAFT);
+
+        EnumPublishOn publishOn = ValueEnum.valueToEnum(EnumPublishOn.class, halo.getPublishOn());
+        // webhook_subject_type
+        if (publishOn == EnumPublishOn.PUBLISH) {
+            if (Integer.valueOf(1)
+                .equals(dto.getStatus()) && Integer.valueOf(1)
+                .equals(dto.getPublicFlag())) {
+                switch (dto.getWebhookSubjectType()) {
+                    case PUBLISH:
+                        postParam.setStatus(PostStatus.PUBLISHED);
+                        break;
+                    case UPDATE:
+                        postParam.setStatus(PostStatus.PUBLISHED);
+                        break;
+                    default:
+                        postParam.setStatus(PostStatus.DRAFT);
+                        log.error("unknown webhook subject type: {}", dto.getWebhookSubjectType());
+                }
+            } else {
+                postParam.setStatus(PostStatus.DRAFT);
+            }
+        }
+
+        if (publishOn == EnumPublishOn.REVIEW) {
+            switch (dto.getWebhookSubjectType()) {
+                case NEW_REVIEW:
+                    postParam.setStatus(PostStatus.DRAFT);
+                    break;
+                case COMPLETE_REVIEW:
+                    postParam.setStatus(PostStatus.PUBLISHED);
+                    break;
+                case CANCEL_REVIEW:
+                    postParam.setStatus(PostStatus.DRAFT);
+                    break;
+                default:
+                    postParam.setStatus(PostStatus.DRAFT);
+                    log.error("unknown webhook subject type: {}", dto.getWebhookSubjectType());
+            }
         }
 
         postParam.setSlug(dto.getSlug());
@@ -36,9 +75,11 @@ public class HaloDataConvertor {
         postParam.setEditorType(PostEditorType.MARKDOWN);
         postParam.setContent(dto.getBodyHtml());
         postParam.setOriginalContent(dto.getBody());
-        postParam.setSummary(dto.getBody()
-            .substring(0, Math.min(dto.getBody()
-                .length(), 150)));
+        if (StringUtils.isNotBlank(dto.getBody())) {
+            postParam.setSummary(dto.getBody()
+                .substring(0, Math.min(dto.getBody()
+                    .length(), 150)));
+        }
         // postParam.setThumbnail();
         // postParam.setDisallowComment();
         // postParam.setTemplate();

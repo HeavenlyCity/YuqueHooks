@@ -1,6 +1,9 @@
 package cn.ridup.tool.yuquehooks.integration;
 
+import org.springframework.web.bind.annotation.PathVariable;
+
 import cn.ridup.tool.yuquehooks.integration.request.HaloPostRequestDto;
+import cn.ridup.tool.yuquehooks.integration.request.PostStatus;
 import cn.ridup.tool.yuquehooks.integration.response.login.HaloLoginResponseDto;
 import cn.ridup.tool.yuquehooks.integration.response.post.BasePostSimpleDTO;
 import cn.ridup.tool.yuquehooks.integration.response.post.HaloPostResponseDto;
@@ -22,4 +25,6 @@ public interface HaloIntegration {
     HaloPostResponseDto updatePost(HaloPostRequestDto requestDto,Integer postId);
 
     Page<BasePostSimpleDTO> queryPostList(String title, int page, int size);
+
+    BasePostSimpleDTO updateStatusBy(Integer postId,PostStatus status);
 }
