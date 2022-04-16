@@ -1,9 +1,10 @@
 package cn.ridup.tool.yuquehooks.service.convertor;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import cn.ridup.tool.yuquehooks.config.properties.HaloProperties;
 import cn.ridup.tool.yuquehooks.integration.request.PostEditorType;
@@ -78,22 +79,60 @@ public class HaloDataConvertor {
         postParam.setEditorType(PostEditorType.MARKDOWN);
         if (StringUtils.isNotBlank(dto.getBodyHtml())) {
             String bodyHtml = dto.getBodyHtml();
+            Document document = Jsoup.parse(bodyHtml);
+            Elements neQuotes = document.getElementsByClass("ne-quote");
+            neQuotes.forEach(element -> {
+                element.tagName("blockquote");
+            });
 
-            Pattern p = Pattern.compile("<div [^>]*class=\"ne-thirdparty\"(<div[^>]*>.*?</div>|.)*?</div>");
-            Matcher matcher = p.matcher(bodyHtml);
-            if (matcher.find()) {
-                String musicDiv = matcher.group();
-                Pattern musicPattern = Pattern.compile("https://music.163.com[^\"]*");
-                Matcher musicMatcher = musicPattern.matcher(musicDiv);
-                if (musicMatcher.find()) {
-                    String musicUrl = musicMatcher.group();
-                    bodyHtml = bodyHtml.replace(musicDiv,
-                        "<iframe frameborder=\"no\" border=\"0\" marginwidth=\"0\" marginheight=\"0\" height=86 src=\""
-                            + musicUrl + "\" style=\"width: -webkit-fill-available;\"></iframe>\n");
-                }
-            }
+            Elements pres = document.getElementsByTag("pre");
+            pres.forEach(element -> {
+                element.removeClass("ne-codeblock");
+                Element code = new Element("code");
+                element.classNames()
+                    .forEach(code::addClass);
+                code.insertChildren(0, element.childNodes());
+                element.empty();
+                element.appendChild(code);
+            });
 
-            postParam.setContent(bodyHtml);
+            document.getElementsByClass("ne-thirdparty")
+                .forEach(element -> {
+                    if (element.childNodes()
+                        .size() > 0) {
+                        String musicUrl = element.childNodes()
+                            .get(0)
+                            .attr("href");
+                        Element musicIframe = new Element("iframe");
+                        musicIframe.attr("frameborder", "no");
+                        musicIframe.attr("border", "0");
+                        musicIframe.attr("marginwidth", "0");
+                        musicIframe.attr("marginheight", "0");
+                        musicIframe.attr("style", "width: -webkit-fill-available;");
+                        musicIframe.attr("height", "86");
+                        musicIframe.attr("src", musicUrl);
+                        element.after(musicIframe);
+                        element.remove();
+                    }
+                });
+
+            document.getElementsByClass("ne-hr")
+                .forEach(element -> {
+                    element.attr("style", "width: 100%;");
+                });
+
+            document.getElementsByClass("ne-tli-symbol")
+                .forEach(element -> {
+                    Element input = new Element("input");
+                    input.attr("class", "task-list-item-checkbox");
+                    input.attr("disabled", "");
+                    input.attr("type", "checkbox");
+                    element.empty();
+                    element.insertChildren(0, input);
+                });
+
+            postParam.setContent(document.body()
+                .html());
         }
 
         postParam.setOriginalContent(dto.getBody());
