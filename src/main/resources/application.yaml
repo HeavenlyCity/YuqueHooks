@@ -30,7 +30,7 @@ spring:
 management:
   endpoints:
     web:
-      base-path: /api/admin/actuator
+      base-path: /yuque/hooks/actuator
       exposure:
         include: [ 'httptrace', 'metrics', 'env', 'logfile', 'health' ]
   health:

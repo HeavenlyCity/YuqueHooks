@@ -133,15 +133,24 @@ public class HaloDataConvertor {
 
             postParam.setContent(document.body()
                 .html());
+
+            if (StringUtils.isNotBlank(document.body()
+                .html())) {
+                postParam.setSummary(document.body()
+                    .html()
+                    .substring(0, Math.min(dto.getBody()
+                        .length(), 200)));
+            }
+
+            Elements imgList = document.getElementsByTag("img");
+            if(!imgList.isEmpty()){
+                postParam.setThumbnail(imgList.get(0).attr("src"));
+            }
+
         }
 
         postParam.setOriginalContent(dto.getBody());
-        if (StringUtils.isNotBlank(dto.getBody())) {
-            postParam.setSummary(dto.getBody()
-                .substring(0, Math.min(dto.getBody()
-                    .length(), 150)));
-        }
-        // postParam.setThumbnail();
+
         // postParam.setDisallowComment();
         // postParam.setTemplate();
         // postParam.setTopPriority();

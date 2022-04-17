@@ -83,8 +83,6 @@ public class YuqueHooksServiceImpl implements YuqueHooksService {
                     haloIntegration.createPost(requestDto);
                 }
         }
-
-
     }
 
 }

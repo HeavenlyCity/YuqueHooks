@@ -1,11 +1,13 @@
 package cn.ridup.tool.yuquehooks.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cn.ridup.tool.yuquehooks.YuqueHooksApplication;
 import cn.ridup.tool.yuquehooks.service.YuqueHooksService;
 import cn.ridup.tool.yuquehooks.service.dto.YuqueHooksDto;
 import lombok.extern.slf4j.Slf4j;
@@ -29,5 +31,7 @@ public class YuqueHooksController {
     public void hooks(@RequestBody YuqueHooksDto dto) {
         yuqueHooksService.hooks(dto);
     }
+
+
 
 }
