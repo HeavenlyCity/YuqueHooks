@@ -41,10 +41,10 @@ public class YuqueHooksServiceImpl implements YuqueHooksService {
     @Override
     public void hooks(YuqueHooksDto yuqueHooksDto) {
         DocDetailDto docDetailDto = DocDetailConvertor.convertToDocDetail(yuqueHooksDto);
-        log.info("the docDetailDto is {}", docDetailDto);
-        Assert.notNull(docDetailDto, "yuque doc detail must not be null");
+        log.info("the doc detail after converted is ==> {}", docDetailDto);
+        Assert.notNull(docDetailDto, "yu que doc detail must not be null!");
         DocDetailSerializer data = docDetailDto.getData();
-        Assert.notNull(data, "yuque doc detail data must not be null");
+        Assert.notNull(data, "yu que doc detail data must not be null!");
         Page<BasePostSimpleDTO> postList = haloIntegration.queryPostList(data.getTitle(), 0, 1000);
         boolean isExist = false;
         Integer postId = null;
