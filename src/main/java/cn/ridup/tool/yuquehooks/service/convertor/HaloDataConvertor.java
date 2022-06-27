@@ -131,6 +131,31 @@ public class HaloDataConvertor {
                     element.insertChildren(0, input);
                 });
 
+            // for the image add a gallery
+            document.getElementsByClass("ne-p")
+                .forEach(element -> {
+                    if (element.childNode(0)
+                        .nodeName()
+                        .equals("img")) {
+                        String src = element.childNode(0)
+                            .attr("src");
+                        Element gallery = new Element("span");
+                        gallery.attr("data-fancybox", "gallery");
+                        gallery.attr("href", src);
+                        gallery.attr("style", "display: block;");
+                        element.childNode(0)
+                            .attr("class", "lazyload");
+                        element.childNode(0)
+                            .attr("data-src", src);
+                        element.childNode(0)
+                            .attr("data-loaded", "true");
+                        gallery.insertChildren(0, element.childNode(0).clone());
+                        element.childNode(0)
+                            .remove();
+                        element.insertChildren(0, gallery);
+                    }
+                });
+
             postParam.setContent(document.body()
                 .html());
 
@@ -143,8 +168,10 @@ public class HaloDataConvertor {
             }
 
             Elements imgList = document.getElementsByTag("img");
-            if(!imgList.isEmpty()){
-                postParam.setThumbnail(imgList.get(0).attr("src"));
+            if (!imgList.isEmpty()) {
+                // thumbnail
+                postParam.setThumbnail(imgList.get(0)
+                    .attr("src"));
             }
 
         }
