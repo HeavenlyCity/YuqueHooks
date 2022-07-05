@@ -5,18 +5,20 @@
 ## 功能与规划
 
 - [X] 统一Hooks处理的文档信息
-- [X] 支持Halo
-- [ ] 支持掘金
-- [ ] 支持CSDN
-- [ ] 支持博客园
-- [ ] 支持微信公众号
+- [X] 支持 Halo
+- [ ] 支持 掘金
+- [ ] 支持 CSDN
+- [ ] 支持 博客园
+- [ ] 支持 微信公众号
 - [ ] 语雀文档导出，包括内嵌语雀链接的处理
 
 ## 设计
 
-参考 [这里](https://www.yuque.com/docs/share/d715a70a-4550-42d6-bbfd-9de1f0ab25e1)
+参考 [这里](https://ridup.cn/archives/zzs186)
 
 ## 使用
+
+参考 [这里](https://ridup.cn/archives/ozkog0)
 
 ## 参考（Reference）
 
