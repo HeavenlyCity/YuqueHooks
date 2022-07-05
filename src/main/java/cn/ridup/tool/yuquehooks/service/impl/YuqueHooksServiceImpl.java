@@ -45,7 +45,7 @@ public class YuqueHooksServiceImpl implements YuqueHooksService {
         Assert.notNull(docDetailDto, "yu que doc detail must not be null!");
         DocDetailSerializer data = docDetailDto.getData();
         Assert.notNull(data, "yu que doc detail data must not be null!");
-        Page<BasePostSimpleDTO> postList = haloIntegration.queryPostList(data.getTitle(), 0, 1000);
+        Page<BasePostSimpleDTO> postList = haloIntegration.queryPostList(data.getTitle(), 0, 20);
         boolean isExist = false;
         Integer postId = null;
         if (postList.getTotal() > 0) {
@@ -53,6 +53,13 @@ public class YuqueHooksServiceImpl implements YuqueHooksService {
                 .stream()
                 .anyMatch(basePostSimpleDTO -> basePostSimpleDTO.getSlug()
                     .equals(data.getSlug()));
+            if(!isExist) {
+                postList = haloIntegration.queryPostList(null, 0, 9999);
+                isExist = postList.getContent()
+                    .stream()
+                    .anyMatch(basePostSimpleDTO -> basePostSimpleDTO.getSlug()
+                        .equals(data.getSlug()));
+            }
             if(isExist){
                 BasePostSimpleDTO first = postList.getContent()
                     .stream()
