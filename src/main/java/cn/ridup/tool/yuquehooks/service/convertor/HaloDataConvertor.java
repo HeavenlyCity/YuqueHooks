@@ -131,6 +131,10 @@ public class HaloDataConvertor {
                     element.insertChildren(0, input);
                 });
 
+
+            // TODO  support the svg img
+
+
             postParam.setContent(document.body()
                 .html());
 
