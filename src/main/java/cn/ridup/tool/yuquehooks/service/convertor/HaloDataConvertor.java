@@ -154,7 +154,31 @@ public class HaloDataConvertor {
                             .remove();
                         element.insertChildren(0, gallery);
                     }
-                    // TODO  support the svg img
+
+                });
+
+            //  support the svg img
+            document.getElementsByClass("ne-image")
+                .forEach(element -> {
+                    if (element.nodeName()
+                        .equals("img")) {
+                        String src = element.childNode(0)
+                            .attr("src");
+                        Element gallery = new Element("span");
+                        gallery.attr("data-fancybox", "gallery");
+                        gallery.attr("href", src);
+                        gallery.attr("style", "display: block;");
+                        element.childNode(0)
+                            .attr("class", "lazyload");
+                        element.childNode(0)
+                            .attr("data-src", src);
+                        element.childNode(0)
+                            .attr("data-loaded", "true");
+                        gallery.insertChildren(0, element.childNode(0).clone());
+                        element.childNode(0)
+                            .remove();
+                        element.insertChildren(0, gallery);
+                    }
                 });
 
             postParam.setContent(document.body()
