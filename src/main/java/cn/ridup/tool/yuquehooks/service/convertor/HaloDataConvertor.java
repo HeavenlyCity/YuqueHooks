@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 import cn.ridup.tool.yuquehooks.config.properties.HaloProperties;
@@ -149,7 +150,8 @@ public class HaloDataConvertor {
                             .attr("data-src", src);
                         element.childNode(0)
                             .attr("data-loaded", "true");
-                        gallery.insertChildren(0, element.childNode(0).clone());
+                        gallery.insertChildren(0, element.childNode(0)
+                            .clone());
                         element.childNode(0)
                             .remove();
                         element.insertChildren(0, gallery);
@@ -158,26 +160,22 @@ public class HaloDataConvertor {
                 });
 
             //  support the svg img
+            log.info("support the svg img");
             document.getElementsByClass("ne-image")
                 .forEach(element -> {
                     if (element.nodeName()
                         .equals("img")) {
-                        String src = element.childNode(0)
-                            .attr("src");
+                        String src = element.attr("src");
                         Element gallery = new Element("span");
                         gallery.attr("data-fancybox", "gallery");
                         gallery.attr("href", src);
                         gallery.attr("style", "display: block;");
-                        element.childNode(0)
-                            .attr("class", "lazyload");
-                        element.childNode(0)
-                            .attr("data-src", src);
-                        element.childNode(0)
-                            .attr("data-loaded", "true");
-                        gallery.insertChildren(0, element.childNode(0).clone());
-                        element.childNode(0)
-                            .remove();
-                        element.insertChildren(0, gallery);
+                        ((Node) element).attr("class", "lazyload");
+                        ((Node) element).attr("data-src", src);
+                        ((Node) element).attr("data-loaded", "true");
+                        ((Node) element).attr("style", "margin: 0 auto;");
+                        gallery.insertChildren(0, ((Node) element).clone());
+                        element.replaceWith(gallery);
                     }
                 });
 
